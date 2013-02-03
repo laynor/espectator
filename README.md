@@ -1,3 +1,5 @@
+# DEPRECATED!!
+# SUPERSEDED BY [spectator-emacs](https://github.com/laynor/spectator-emacs)
 # ESpectator (a fork of [Spectator][spectator] that integrates with emacs)
 
 ESpectator provides discreet notifications in the emacs modeline, via
