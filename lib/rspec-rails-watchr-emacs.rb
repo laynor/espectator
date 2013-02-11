@@ -7,7 +7,7 @@ require 'socket'
 class SpecWatchr
   String.send :include, Term::ANSIColor
 
-  
+
   module CommandLine
     def terminal_columns
       cols = `stty -a`.scan(/ (\d+) columns/).flatten.first
@@ -42,7 +42,7 @@ class SpecWatchr
       :"#{symbol.inspect}"
     end
     def elispify_symbol(symbol)
-      symbol.to_s.gsub(/_/,'-') 
+      symbol.to_s.gsub(/_/,'-')
     end
     def hash_to_esexp (hash)
       h = hash.clone
@@ -133,13 +133,13 @@ class SpecWatchr
       h << "\nmouse-1: switch to result buffer"
     end
 
-    
+
     def eregister
       esend :register => @enotify_slot_id, :handler_fn => :enotify_rspec_result_message_handler
     end
 
-      
-    
+
+
     def esend_results(results)
       summ = extract_rspec_summary(results)
       status = summ[:status]
@@ -153,8 +153,8 @@ class SpecWatchr
       }
       esend message
     end
-  end 
-        
+  end
+
 
   module Specs
 
@@ -166,17 +166,17 @@ class SpecWatchr
       begin
         print "--- Sending notification to #{@enotify_host}:#{@enotify_port}" \
         " through #{@enotify_slot_id}... ".cyan
-        esend_results results 
+        esend_results results
         puts "Success!".green
       rescue
         puts "Failed!".red
         init_network
-        rspec_send_results results 
+        rspec_send_results results
       end
     end
 
     def check_if_bundle_needed
-      if `bundle exec #{rspec_command} -v` == `#{rspec_command} -v` 
+      if `bundle exec #{rspec_command} -v` == `#{rspec_command} -v`
         @bundle = ""
       else
         @bundle = "bundle exec "
@@ -216,7 +216,7 @@ class SpecWatchr
       matched_specs
     end
   end
-  
+
   module Control
     def exit_watchr
       @exiting = true
@@ -233,8 +233,8 @@ class SpecWatchr
       `bundle show #{gem}`
       $? == 0
     end
-      
-      
+
+
     def reload!
       # puts ARGV.join(' ')
       if bundled? "watchr"
@@ -255,7 +255,7 @@ class SpecWatchr
 
       @interrupted ||= false
 
-      Signal.trap('INT') { 
+      Signal.trap('INT') {
         puts  ' (Interrupted with CTRL+C)'.red
         if @interrupted
           @exiting ? abort_watchr : exit_watchr
@@ -294,12 +294,12 @@ class SpecWatchr
     if blank_string?(host_and_port)
       @enotify_host, @enotify_port = ['localhost', @default_options[:enotify_port]]
     else
-      @enotify_host, @enotify_port = host_and_port.split(/\s:\s/) 
+      @enotify_host, @enotify_port = host_and_port.split(/\s:\s/)
       @enotify_port = @enotify_port.to_i
     end
     init_network
   end
-    
+
   def init_network
     begin
       print "=== Connecting to emacs... ".cyan
@@ -327,7 +327,7 @@ class SpecWatchr
       #  :pending => #pending
       #  :examples => #examples
       #  :status => (:success|:failure|:pending) }
-      :custom_extract_summary_proc => nil, 
+      :custom_extract_summary_proc => nil,
       :error_count_line => -1,
 
       # custom_matcher : takes two arguments: the path of the modified
@@ -336,6 +336,7 @@ class SpecWatchr
       :custom_matcher => nil     }
 
 
+    puts "THIS GEM IS DEPRECATED. USE spectator-emacs INSTEAD."
     options = @default_options.merge(options)
     @cli_args = ARGV.to_a
     puts "========OPTIONS=========="
@@ -347,15 +348,15 @@ class SpecWatchr
     @notification_face = options[:notification_face]
     @custom_extract_summary_proc = options[:custom_extract_summary_proc]
     @error_count_line = options[:error_count_line]
-          
+
     @custom_matcher = options[:custom_matcher]
-    
+
     yield if block_given?
     @enotify_slot_id = options[:slot_id] || ((File.basename Dir.pwd).split('_').map { |s| s.capitalize }).join
     check_if_bundle_needed
     init_network
     @watchr = watchr
-    
+
 
     watchr.watch('config/routes.rb')                         {|m| rspec_files specs_for(m[1])}
     watchr.watch('^spec/(.*)_spec\.rb$')                     {|m| rspec_files specs_for(m[1])}

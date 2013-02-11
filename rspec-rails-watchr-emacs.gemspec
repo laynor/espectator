@@ -8,15 +8,15 @@ Gem::Specification.new do |s|
   s.authors     = %w[Alessandro Piras]
   s.email       = %w[laynor@gmail.com]
   s.homepage    = 'https://github.com/laynor/espectator'
-  s.summary     = %q{Watches specs for a Rails (2 or 3) project - notifications via Emacs enotify}
-  s.description = %q{Watches specs for a Rails (2 or 3) project - notifications via Emacs enotify. Fork of rspec-rails-watchr (spectator)}
+  s.summary     = %q{Deprecated. Use spectator-emacs instead.}
+  s.description = %q{Deprecated. Use spectator-emacs instead. Watches specs for a Rails (2 or 3) project - notifications via Emacs enotify. Fork of rspec-rails-watchr (spectator)}
   s.license     = 'MIT'
 
   s.files         = `git ls-files`.split("\n")
   s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
   s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
   s.require_paths = %w[lib]
-  
+
   s.add_dependency 'watchr'
   s.add_dependency 'term-ansicolor'
   s.add_dependency 'notify'
